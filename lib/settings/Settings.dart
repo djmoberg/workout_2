@@ -25,21 +25,33 @@ class MySettings extends StatefulWidget {
 class _MySettingsState extends State<MySettings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            title: Text("Dark Theme"),
-            trailing: Switch(
-              onChanged: (value) {
-                Store().setTheme(value ? "dark" : "light");
-                widget.update();
-              },
-              value: Store().theme == "dark",
-            ),
+    return ListView(
+      children: <Widget>[
+        DrawerHeader(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Settings",
+                style: Theme.of(context).textTheme.headline,
+              ),
+            ],
           ),
-        ],
-      ),
+          decoration:
+              BoxDecoration(color: Theme.of(context).secondaryHeaderColor),
+        ),
+        ListTile(
+          title: Text("Dark Theme"),
+          trailing: Switch(
+            onChanged: (value) {
+              Store().setTheme(value ? "dark" : "light");
+              widget.update();
+            },
+            value: Store().theme == "dark",
+          ),
+        ),
+      ],
     );
   }
 }

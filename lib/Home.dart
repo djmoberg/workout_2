@@ -33,73 +33,45 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  _MyHomeState();
+  List<Widget> _views = [
+    Workout(),
+    ExerciseWidget(),
+    Stats(),
+  ];
 
   int _index = 0;
 
+  _onTap(index) {
+    setState(() {
+      _index = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> _views = [
-      Workout(),
-      ExerciseWidget(),
-      Stats(),
-      Settings(update: widget.update),
-    ];
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Workout 2"),
+      drawer: Drawer(
+        child: Settings(update: widget.update),
       ),
+      appBar: AppBar(title: Text("Workout 2")),
       body: _views[_index],
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
+        // type: BottomNavigationBarType.shifting,
         currentIndex: _index,
-        onTap: (index) {
-          setState(() {
-            _index = index;
-          });
-        },
+        onTap: _onTap,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: Colors.red,
-            ),
-            title: Text(
-              'Workout',
-              style: TextStyle(color: Colors.red),
-            ),
+            icon: Icon(Icons.home),
+            title: Text('Workout'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.group_work,
-              color: Colors.red,
-            ),
-            title: Text(
-              'Exercise',
-              style: TextStyle(color: Colors.red),
-            ),
+            icon: Icon(Icons.group_work),
+            title: Text('Exercise'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.insert_chart,
-              color: Colors.red,
-            ),
-            title: Text(
-              'Stats',
-              style: TextStyle(color: Colors.red),
-            ),
+            icon: Icon(Icons.insert_chart),
+            title: Text('Stats'),
           ),
-          BottomNavigationBarItem(
-            title: Text(
-              'Settings',
-              style: TextStyle(color: Colors.red),
-            ),
-            icon: Icon(
-              Icons.settings,
-              color: Colors.red,
-            ),
-          )
         ],
       ),
     );

@@ -37,7 +37,7 @@ class _MyExerciseWidgetState extends State<MyExerciseWidget> {
                   child: ListTile(
                     title: Text(exercise.name),
                     subtitle: Text(totalTimeString(exercise.objects)),
-                    trailing: Icon(Icons.keyboard_arrow_right),
+                    trailing: Icon(Icons.navigate_next),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -54,20 +54,22 @@ class _MyExerciseWidgetState extends State<MyExerciseWidget> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            List<ExerciseObject> objetcs = List();
-            Exercise exercise = Exercise(name: "", objects: objetcs);
-            Store().addExercise(exercise);
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          List<ExerciseObject> objetcs = List();
+          Exercise exercise = Exercise(name: "", objects: objetcs);
+          Store().addExercise(exercise);
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => EditExercise(
-                          exercise: exercise,
-                        )));
-          }),
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EditExercise(
+                        exercise: exercise,
+                      )));
+        },
+        icon: Icon(Icons.add),
+        label: Text("New"),
+      ),
     );
   }
 }
