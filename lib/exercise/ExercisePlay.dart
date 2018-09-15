@@ -119,10 +119,16 @@ class _MyExercisePlayState extends State<MyExercisePlay> {
   }
 
   void _start(int time) {
-    setState(() {
-      _endTime = DateTime.now().millisecondsSinceEpoch + time;
-    });
-    _timer = Timer.periodic(Duration(milliseconds: 100), _updateTime);
+    if (time == 0) {
+      setState(() {
+        _tapStop = true;
+      });
+    } else {
+      setState(() {
+        _endTime = DateTime.now().millisecondsSinceEpoch + time;
+      });
+      _timer = Timer.periodic(Duration(milliseconds: 100), _updateTime);
+    }
   }
 
   void _updateTime(timer) {
@@ -193,92 +199,95 @@ class _MyExercisePlayState extends State<MyExercisePlay> {
   Widget build(BuildContext context) {
     ExerciseObject object = _exercise.objects[_currentIndex];
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 32.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Card(
-                color: Colors.red,
-                child: ListTile(
-                  onTap: () {
-                    if (_tapStop) {
-                      setState(() {
-                        _paused = false;
-                        _endTime = DateTime.now().millisecondsSinceEpoch +
-                            _currentTime;
-                      });
-                      setState(() {
-                        _tapStop = false;
-                      });
-                      _timer = Timer.periodic(
-                          Duration(milliseconds: 100), _updateTime);
-                    }
-                  },
-                  title: _done
-                      ? Column(
-                          children: <Widget>[
-                            Text(
-                              "Done",
-                              style: Theme.of(context).textTheme.display2,
-                            ),
-                            Text(
-                              "00:00",
-                              style: Theme.of(context).textTheme.display3,
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: <Widget>[
-                            Text(
-                              object.name,
-                              style: Theme.of(context).textTheme.display2,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              _tapStop
-                                  ? "Tap To Continue"
-                                  : formatTime(_currentTime),
-                              style: _tapStop
-                                  ? Theme.of(context).textTheme.display1
-                                  : Theme.of(context).textTheme.display3,
-                            ),
-                          ],
-                        ),
+      body: GestureDetector(
+        onTap: () {
+          if (_tapStop) {
+            setState(() {
+              _paused = false;
+              _endTime = DateTime.now().millisecondsSinceEpoch + _currentTime;
+            });
+            setState(() {
+              _tapStop = false;
+            });
+            _timer = Timer.periodic(Duration(milliseconds: 100), _updateTime);
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(top: 32.0),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Card(
+                  color: Colors.red,
+                  child: ListTile(
+                    title: _done
+                        ? Column(
+                            children: <Widget>[
+                              Text(
+                                "Done",
+                                style: Theme.of(context).textTheme.display2,
+                              ),
+                              Text(
+                                "00:00",
+                                style: Theme.of(context).textTheme.display3,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: <Widget>[
+                              Text(
+                                object.name,
+                                style: Theme.of(context).textTheme.display2,
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                _tapStop
+                                    ? "Tap Anywhere To Continue"
+                                    : formatTime(_currentTime),
+                                style: _tapStop
+                                    ? Theme.of(context).textTheme.display1
+                                    : Theme.of(context).textTheme.display3,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                controller: _controller,
-                shrinkWrap: true,
-                itemCount: _exercise.objects.length,
-                itemBuilder: (context, index) {
-                  ExerciseObject object = _exercise.objects[index];
-                  if (index <= _currentIndex)
-                    return SizedBox(
-                      height: 0.0,
+              Expanded(
+                child: ListView.builder(
+                  controller: _controller,
+                  shrinkWrap: true,
+                  itemCount: _exercise.objects.length,
+                  itemBuilder: (context, index) {
+                    ExerciseObject object = _exercise.objects[index];
+                    if (index <= _currentIndex)
+                      return SizedBox(
+                        height: 0.0,
+                      );
+                    return ListTile(
+                      title: Column(
+                        children: <Widget>[
+                          Text(
+                            object.name,
+                            style: Theme.of(context).textTheme.display2,
+                            textAlign: TextAlign.center,
+                          ),
+                          object.time == 0
+                              ? SizedBox()
+                              : Text(
+                                  formatTime(object.time),
+                                  style: Theme.of(context).textTheme.display3,
+                                )
+                        ],
+                      ),
                     );
-                  return ListTile(
-                    title: Column(
-                      children: <Widget>[
-                        Text(
-                          object.name,
-                          style: Theme.of(context).textTheme.display2,
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          formatTime(object.time),
-                          style: Theme.of(context).textTheme.display3,
-                        )
-                      ],
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Row(
@@ -288,30 +297,32 @@ class _MyExercisePlayState extends State<MyExercisePlay> {
           // _resetButton(),
         ],
       ),
-      floatingActionButton: _paused
-          ? FloatingActionButton(
-              child: Icon(Icons.play_arrow),
-              onPressed: () {
-                setState(() {
-                  _paused = false;
-                  _endTime =
-                      DateTime.now().millisecondsSinceEpoch + _currentTime;
-                });
-                _timer =
-                    Timer.periodic(Duration(milliseconds: 100), _updateTime);
-              },
-            )
-          : FloatingActionButton(
-              child: Icon(Icons.pause),
-              onPressed: () {
-                setState(() {
-                  _currentTime =
-                      _endTime - DateTime.now().millisecondsSinceEpoch;
-                  _paused = true;
-                });
-                _timer.cancel();
-              },
-            ),
+      floatingActionButton: _done || _tapStop
+          ? SizedBox()
+          : _paused
+              ? FloatingActionButton(
+                  child: Icon(Icons.play_arrow),
+                  onPressed: () {
+                    setState(() {
+                      _paused = false;
+                      _endTime =
+                          DateTime.now().millisecondsSinceEpoch + _currentTime;
+                    });
+                    _timer = Timer.periodic(
+                        Duration(milliseconds: 100), _updateTime);
+                  },
+                )
+              : FloatingActionButton(
+                  child: Icon(Icons.pause),
+                  onPressed: () {
+                    setState(() {
+                      _currentTime =
+                          _endTime - DateTime.now().millisecondsSinceEpoch;
+                      _paused = true;
+                    });
+                    _timer.cancel();
+                  },
+                ),
     );
   }
 }
