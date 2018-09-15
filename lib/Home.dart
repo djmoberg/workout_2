@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:workout_2/workout/Workout.dart';
+import 'package:workout_2/workout/WorkoutWidget.dart';
 import 'package:workout_2/exercise/ExerciseWidget.dart';
 import 'package:workout_2/stats/Stats.dart';
 import 'package:workout_2/settings/Settings.dart';
@@ -34,12 +34,12 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
   List<Widget> _views = [
-    Workout(),
+    WorkoutWidget(),
     ExerciseWidget(),
     Stats(),
   ];
 
-  int _index = 0;
+  int _index = 1;
 
   _onTap(index) {
     setState(() {

@@ -21,6 +21,8 @@ class MyExerciseWidget extends StatefulWidget {
 }
 
 class _MyExerciseWidgetState extends State<MyExerciseWidget> {
+  Exercise _deletedExercise;
+
   @override
   Widget build(BuildContext context) {
     List<Exercise> exercises = Store().exercises;
@@ -48,12 +50,32 @@ class _MyExerciseWidgetState extends State<MyExerciseWidget> {
                   key: Key(exercise.id),
                   background: DismissibleContainer(),
                   onDismissed: (direction) {
+                    setState(() {
+                      _deletedExercise = exercise;
+                    });
                     Store().deleteExercise(exercise.id);
                     setState(() {});
                   },
                 );
               },
             ),
+      bottomNavigationBar: _deletedExercise != null
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  onPressed: () async {
+                    await Store().addExercise(_deletedExercise);
+                    setState(() {
+                      _deletedExercise = null;
+                    });
+                  },
+                  icon: Icon(Icons.undo),
+                )
+                // _resetButton(),
+              ],
+            )
+          : SizedBox(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           List<ExerciseObject> objetcs = List();
@@ -68,7 +90,7 @@ class _MyExerciseWidgetState extends State<MyExerciseWidget> {
                       )));
         },
         icon: Icon(Icons.add),
-        label: Text("New"),
+        label: Text("New Exercise"),
       ),
     );
   }
