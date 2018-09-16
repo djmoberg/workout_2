@@ -21,12 +21,14 @@ class Store {
   String theme = "light";
   List<Exercise> exercises;
   List<ExerciseStat> exerciseStats;
+  List<ExerciseStat> workoutStats;
   List<Workout> workouts;
 
   Future init() async {
     theme = await _getTheme();
     exercises = await _getExercises();
     exerciseStats = await _getExerciseStats();
+    workoutStats = await _getWorkoutStats();
     workouts = await _getWorkouts();
   }
 
@@ -162,6 +164,37 @@ class Store {
     });
   }
   // / exerciseStats
+
+  // workoutStats
+  static Future<List<ExerciseStat>> _getWorkoutStats() async {
+    List<String> workoutStatsString = await _prefs.then((prefs) {
+      return (prefs.getStringList("workoutStats") ?? null);
+    });
+
+    if (workoutStatsString == null) {
+      return List();
+    } else {
+      List<ExerciseStat> list = List();
+
+      workoutStatsString.forEach((value) async {
+        ExerciseStat exerciseStat = ExerciseStat.fromJson(json.decode(value));
+        if (exerciseStat != null) list.add(exerciseStat);
+      });
+
+      return list;
+    }
+  }
+
+  Future addWorkoutStat(ExerciseStat value) async {
+    workoutStats.add(value);
+
+    await _prefs.then((prefs) {
+      List<String> list = prefs.getStringList("workoutStats") ?? List();
+      list.add(json.encode(value.toJson()));
+      prefs.setStringList("workoutStats", list);
+    });
+  }
+  // / workoutStats
 
   // workouts
   static Future<List<Workout>> _getWorkouts() async {

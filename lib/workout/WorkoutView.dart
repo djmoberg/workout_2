@@ -92,7 +92,7 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => WorkoutPlay(
-                              exercises: _workout.exercises,
+                              workout: _workout,
                             )));
               },
       ),

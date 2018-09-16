@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:workout_2/exercise/ExercisePlay.dart';
 import 'package:workout_2/exercise/objects.dart';
+import 'package:workout_2/stats/objects.dart';
+import 'package:workout_2/utils/Store.dart';
 import 'package:workout_2/utils/utils.dart';
+import 'package:workout_2/workout/objects.dart';
 
 class WorkoutPlay extends StatelessWidget {
-  WorkoutPlay({Key key, this.exercises}) : super(key: key);
+  WorkoutPlay({Key key, this.workout}) : super(key: key);
 
-  final List<Exercise> exercises;
+  final Workout workout;
 
   @override
   Widget build(BuildContext context) {
     return MyWorkoutPlay(
-      exercises: exercises,
+      workout: workout,
     );
   }
 }
 
 class MyWorkoutPlay extends StatefulWidget {
-  MyWorkoutPlay({Key key, this.exercises}) : super(key: key);
+  MyWorkoutPlay({Key key, this.workout}) : super(key: key);
 
-  final List<Exercise> exercises;
+  final Workout workout;
 
   @override
   _MyWorkoutPlayState createState() => _MyWorkoutPlayState();
@@ -44,6 +47,11 @@ class _MyWorkoutPlayState extends State<MyWorkoutPlay> {
         _done = true;
         _endTime = DateTime.now().millisecondsSinceEpoch;
       });
+      Store().addWorkoutStat(ExerciseStat(
+        name: widget.workout.name,
+        startTime: _startTime,
+        endTime: _endTime,
+      ));
     } else {
       setState(() {
         _currentIndex++;
@@ -54,7 +62,7 @@ class _MyWorkoutPlayState extends State<MyWorkoutPlay> {
   @override
   void initState() {
     super.initState();
-    _exercises = widget.exercises;
+    _exercises = widget.workout.exercises;
     _startTime = DateTime.now().millisecondsSinceEpoch;
   }
 

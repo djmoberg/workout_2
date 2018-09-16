@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:workout_2/stats/DetailedStats.dart';
-import 'package:workout_2/stats/WorkoutStats.dart';
 
 import 'package:workout_2/stats/objects.dart';
 import 'package:workout_2/utils/Store.dart';
 import 'package:workout_2/utils/utils.dart';
 
-class Stats extends StatelessWidget {
+class WorkoutStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<ExerciseStat> exerciseStats = Store().exerciseStats;
-    Map<String, dynamic> gStats = calculateExerciseStats(exerciseStats);
+    List<ExerciseStat> workoutStats = Store().workoutStats;
+    Map<String, dynamic> gStats = calculateExerciseStats(workoutStats);
 
     _navigate(String s) {
       Navigator.push(
@@ -27,12 +26,18 @@ class Stats extends StatelessWidget {
       return statTotalTimeString(gStats[a]) == statTotalTimeString(gStats[b]);
     }
 
-    return ListView(
+    return Column(
       children: <Widget>[
-        WorkoutStats(),
+        Padding(
+          padding: EdgeInsets.only(top: 16.0),
+          child: Text(
+            "Workout stats",
+            style: Theme.of(context).textTheme.headline,
+          ),
+        ),
         Card(
           child: ListTile(
-            title: Text("Exercises this week:"),
+            title: Text("Workouts this week:"),
             subtitle: Text(statTotalTimeString(gStats["week"])),
             trailing: Text(
               gStats["week"].length.toString(),
@@ -44,7 +49,7 @@ class Stats extends StatelessWidget {
         !_equal("week", "month")
             ? Card(
                 child: ListTile(
-                  title: Text("Exercises this month:"),
+                  title: Text("Workouts this month:"),
                   subtitle: Text(statTotalTimeString(gStats["month"])),
                   trailing: Text(
                     gStats["month"].length.toString(),
@@ -57,7 +62,7 @@ class Stats extends StatelessWidget {
         !_equal("month", "year")
             ? Card(
                 child: ListTile(
-                  title: Text("Exercises this year:"),
+                  title: Text("Workouts this year:"),
                   subtitle: Text(statTotalTimeString(gStats["year"])),
                   trailing: Text(
                     gStats["year"].length.toString(),
@@ -70,7 +75,7 @@ class Stats extends StatelessWidget {
         !_equal("year", "allTime")
             ? Card(
                 child: ListTile(
-                  title: Text("Exercises all time:"),
+                  title: Text("Workouts all time:"),
                   subtitle: Text(statTotalTimeString(gStats["allTime"])),
                   trailing: Text(
                     gStats["allTime"].length.toString(),
@@ -80,6 +85,13 @@ class Stats extends StatelessWidget {
                 ),
               )
             : SizedBox(),
+        Padding(
+          padding: EdgeInsets.only(top: 16.0),
+          child: Text(
+            "Exercise stats",
+            style: Theme.of(context).textTheme.headline,
+          ),
+        ),
       ],
     );
   }
