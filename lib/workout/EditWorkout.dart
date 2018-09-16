@@ -66,13 +66,13 @@ class _MyEditWorkoutState extends State<MyEditWorkout> {
               },
             ),
           ),
-          ListTile(
-            title: Text("Auto Continue?"),
-            trailing: Switch(
-              value: true,
-              onChanged: (value) {},
-            ),
-          ),
+          // ListTile(
+          //   title: Text("Auto Continue?"),
+          //   trailing: Switch(
+          //     value: true,
+          //     onChanged: (value) {},
+          //   ),
+          // ),
           Expanded(
             child: DragAndDropList(
               _workout.exercises,

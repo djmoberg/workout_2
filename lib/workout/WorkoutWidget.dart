@@ -38,6 +38,12 @@ class _MyWorkoutWidgetState extends State<MyWorkoutWidget> {
                 )));
   }
 
+  _delete(index) async {
+    await Store().deleteWorkout(index);
+    setState(() {});
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Workout> workouts = Store().workouts;
@@ -51,17 +57,29 @@ class _MyWorkoutWidgetState extends State<MyWorkoutWidget> {
               itemBuilder: (context, index) {
                 Workout workout = workouts[index];
 
-                return Dismissible(
-                  child: ListTile(
-                    title: Text(workout.name),
-                    subtitle: Text(workoutTotalTimeString(workout.exercises)),
-                    trailing: Icon(Icons.navigate_next),
-                    onTap: () => _viewNavigate(index),
-                  ),
-                  key: Key(index.toString()),
-                  background: DismissibleContainer(),
-                  onDismissed: (direction) {
-                    Store().deleteWorkout(index);
+                return ListTile(
+                  title: Text(workout.name),
+                  subtitle: Text(workoutTotalTimeString(workout.exercises)),
+                  trailing: Icon(Icons.navigate_next),
+                  onTap: () => _viewNavigate(index),
+                  onLongPress: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: Text("Are you sure?"),
+                              content: Text(
+                                  "This will permanently delete the workout"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text("Cancel"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                FlatButton(
+                                  child: Text("Yes"),
+                                  onPressed: () => _delete(index),
+                                )
+                              ],
+                            ));
                   },
                 );
               },
