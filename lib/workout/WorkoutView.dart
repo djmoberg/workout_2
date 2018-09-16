@@ -85,14 +85,16 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.play_arrow),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => WorkoutPlay(
-                        exercises: _workout.exercises,
-                      )));
-        },
+        onPressed: workoutTotalTimeString(_workout.exercises) == "Untimed"
+            ? null
+            : () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WorkoutPlay(
+                              exercises: _workout.exercises,
+                            )));
+              },
       ),
     );
   }

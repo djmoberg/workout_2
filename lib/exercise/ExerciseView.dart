@@ -82,14 +82,16 @@ class _MyExerciseViewState extends State<MyExerciseView> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.play_arrow),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ExercisePlay(
-                        exercise: _exercise,
-                      )));
-        },
+        onPressed: totalTimeString(List.from(_exercise.objects)) == "Untimed"
+            ? null
+            : () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ExercisePlay(
+                              exercise: _exercise,
+                            )));
+              },
       ),
     );
   }
