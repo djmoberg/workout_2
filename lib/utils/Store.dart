@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workout_2/exercise/objects.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workout_2/stats/objects.dart';
+import 'package:workout_2/workout/objects.dart';
 
 class Store {
   static final Store _singleton = new Store._internal();
@@ -20,11 +21,13 @@ class Store {
   String theme = "light";
   List<Exercise> exercises;
   List<ExerciseStat> exerciseStats;
+  List<Workout> workouts;
 
   Future init() async {
     theme = await _getTheme();
     exercises = await _getExercises();
     exerciseStats = await _getExerciseStats();
+    workouts = await _getWorkouts();
   }
 
   static Future<String> _getTheme() async {
@@ -159,6 +162,57 @@ class Store {
     });
   }
   // / exerciseStats
+
+  // workouts
+  static Future<List<Workout>> _getWorkouts() async {
+    List<String> workoutsString = await _prefs.then((prefs) {
+      return (prefs.getStringList("workouts") ?? null);
+    });
+
+    if (workoutsString == null) {
+      return List();
+    } else {
+      List<Workout> list = List();
+
+      workoutsString.forEach((value) async {
+        Workout workout = Workout.fromJson(json.decode(value));
+        if (workout != null) list.add(workout);
+      });
+
+      return list;
+    }
+  }
+
+  Future addWorkout(Workout value) async {
+    workouts.add(value);
+
+    await _prefs.then((prefs) {
+      List<String> list = prefs.getStringList("workouts") ?? List();
+      list.add(json.encode(value.toJson()));
+      prefs.setStringList("workouts", list);
+    });
+  }
+
+  Future updateWorkout(Workout editedWorkout, int index) async {
+    workouts.removeAt(index);
+    workouts.insert(index, editedWorkout);
+    await _prefs.then((prefs) {
+      List<String> list = prefs.getStringList("workouts") ?? List();
+      list.removeAt(index);
+      list.insert(index, json.encode(editedWorkout.toJson()));
+      prefs.setStringList("workouts", list);
+    });
+  }
+
+  Future deleteWorkout(int index) async {
+    workouts.removeAt(index);
+    await _prefs.then((prefs) {
+      List<String> list = prefs.getStringList("workouts") ?? List();
+      list.removeAt(index);
+      prefs.setStringList("workouts", list);
+    });
+  }
+  // / workouts
 
   //Non persistence
 

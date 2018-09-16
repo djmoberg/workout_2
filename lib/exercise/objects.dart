@@ -1,15 +1,3 @@
-class Exercises {
-  final List<Exercise> execises;
-
-  Exercises({this.execises});
-
-  factory Exercises.fromJson(List<Exercise> json) {
-    return Exercises(
-      execises: List<Exercise>.from(json),
-    );
-  }
-}
-
 class Exercise {
   String id;
   String name;

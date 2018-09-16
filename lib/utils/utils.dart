@@ -34,6 +34,14 @@ String statTotalTimeString(List<dynamic> list) {
   return covertTime(statTotalTime(list));
 }
 
+String workoutTotalTimeString(List<dynamic> list) {
+  int total = 0;
+  list.forEach((value) {
+    total = total + totalTime(value.objects);
+  });
+  return covertTime(total);
+}
+
 String formatTime(int time) {
   DateTime dt = DateTime.fromMillisecondsSinceEpoch(time);
   // String h = (dt.hour - 1) < 10 ? "0${(dt.hour - 1)}" : "${(dt.hour - 1)}";
