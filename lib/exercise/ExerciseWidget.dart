@@ -31,6 +31,7 @@ class _MyExerciseWidgetState extends State<MyExerciseWidget> {
       body: exercises == null || exercises.length == 0
           ? Center(child: Text("You have no exercises"))
           : ListView.builder(
+              padding: EdgeInsets.only(bottom: 70.0),
               itemCount: exercises.length,
               itemBuilder: (context, index) {
                 Exercise exercise = exercises[index];

@@ -63,7 +63,7 @@ class _MyWorkoutPlayState extends State<MyWorkoutPlay> {
     return Scaffold(
       body: !_done
           ? ListView.builder(
-              padding: EdgeInsets.only(top: 64.0),
+              padding: EdgeInsets.only(top: 64.0, bottom: 70.0),
               itemCount: _exercises.length,
               itemBuilder: (context, index) {
                 Exercise exercise = _exercises[index];

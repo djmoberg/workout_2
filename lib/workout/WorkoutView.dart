@@ -64,6 +64,7 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
         ],
       ),
       body: ListView.builder(
+        padding: EdgeInsets.only(bottom: 70.0),
         itemCount: _workout.exercises.length,
         itemBuilder: (context, index) {
           Exercise exercise = _workout.exercises[index];
