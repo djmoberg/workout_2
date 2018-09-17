@@ -7,8 +7,8 @@ import 'package:workout_2/stats/objects.dart';
 import 'package:workout_2/utils/Store.dart';
 import 'package:workout_2/workout/objects.dart';
 
-// const backend2 = "https://project-tracker-backend2.herokuapp.com";
-const backend = "http://192.168.38.110:3000";
+const backend = "https://workout-2-backend.herokuapp.com";
+const backend2 = "http://192.168.38.110:3000";
 
 Future<bool> putStore() async {
   var store = {
