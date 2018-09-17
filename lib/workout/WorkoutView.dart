@@ -31,6 +31,7 @@ class MyWorkoutView extends StatefulWidget {
 
 class _MyWorkoutViewState extends State<MyWorkoutView> {
   Workout _workout;
+  List<Exercise> _exercises;
 
   @override
   void initState() {
@@ -39,10 +40,8 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
   }
 
   _getTitle() {
-    return Text(_workout.name +
-        " (" +
-        workoutTotalTimeString(_workout.exercises) +
-        ")");
+    return Text(
+        _workout.name + " (" + workoutTotalTimeString(_exercises) + ")");
   }
 
   _editNavigate() {
@@ -56,6 +55,8 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
 
   @override
   Widget build(BuildContext context) {
+    _exercises = Store().getExercisesInWorkout(_workout);
+
     return Scaffold(
       appBar: AppBar(
         title: _getTitle(),
@@ -65,9 +66,9 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
       ),
       body: ListView.builder(
         padding: EdgeInsets.only(bottom: 70.0),
-        itemCount: _workout.exercises.length,
+        itemCount: _exercises.length,
         itemBuilder: (context, index) {
-          Exercise exercise = _workout.exercises[index];
+          Exercise exercise = _exercises[index];
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -85,7 +86,7 @@ class _MyWorkoutViewState extends State<MyWorkoutView> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.play_arrow),
-        onPressed: workoutTotalTimeString(_workout.exercises) == "Untimed"
+        onPressed: workoutTotalTimeString(_exercises) == "Untimed"
             ? null
             : () {
                 Navigator.push(

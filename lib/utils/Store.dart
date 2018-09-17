@@ -245,6 +245,16 @@ class Store {
       prefs.setStringList("workouts", list);
     });
   }
+
+  List<Exercise> getExercisesInWorkout(Workout workout) {
+    List<Exercise> list = List();
+
+    workout.exercises.forEach((id) {
+      list.add(exercises.firstWhere((exercise) => exercise.id == id));
+    });
+
+    return list;
+  }
   // / workouts
 
   //Non persistence

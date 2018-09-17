@@ -56,10 +56,12 @@ class _MyWorkoutWidgetState extends State<MyWorkoutWidget> {
               itemCount: workouts.length,
               itemBuilder: (context, index) {
                 Workout workout = workouts[index];
+                List<Exercise> exercises =
+                    Store().getExercisesInWorkout(workout);
 
                 return ListTile(
                   title: Text(workout.name),
-                  subtitle: Text(workoutTotalTimeString(workout.exercises)),
+                  subtitle: Text(workoutTotalTimeString(exercises)),
                   trailing: Icon(Icons.navigate_next),
                   onTap: () => _viewNavigate(index),
                   onLongPress: () {
@@ -86,7 +88,7 @@ class _MyWorkoutWidgetState extends State<MyWorkoutWidget> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          List<Exercise> exercises = List();
+          List<String> exercises = List();
           Workout workout = Workout(name: "", exercises: exercises);
           Store().addWorkout(workout);
 

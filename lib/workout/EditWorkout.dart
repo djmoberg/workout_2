@@ -29,6 +29,7 @@ class MyEditWorkout extends StatefulWidget {
 
 class _MyEditWorkoutState extends State<MyEditWorkout> {
   Workout _workout;
+  List<Exercise> _exercises;
   TextEditingController _controller;
 
   @override
@@ -40,6 +41,8 @@ class _MyEditWorkoutState extends State<MyEditWorkout> {
 
   @override
   Widget build(BuildContext context) {
+    _exercises = Store().getExercisesInWorkout(_workout);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Edit Workout"),
@@ -75,7 +78,7 @@ class _MyEditWorkoutState extends State<MyEditWorkout> {
           // ),
           Expanded(
             child: DragAndDropList(
-              _workout.exercises,
+              _exercises,
               itemBuilder: (context, item) {
                 return SizedBox(
                   child: Card(
@@ -97,7 +100,7 @@ class _MyEditWorkoutState extends State<MyEditWorkout> {
                 );
               },
               onDragFinish: (before, after) {
-                Exercise data = _workout.exercises[before];
+                String data = _workout.exercises[before];
                 _workout.exercises.removeAt(before);
                 _workout.exercises.insert(after, data);
                 Store().updateWorkout(_workout, widget.index);
@@ -116,7 +119,7 @@ class _MyEditWorkoutState extends State<MyEditWorkout> {
                 MaterialPageRoute(
                     builder: (context) => AddExerciseToWorkout()));
             if (exercise != null) {
-              _workout.exercises.add(exercise);
+              _workout.exercises.add(exercise.id);
               Store().updateWorkout(_workout, widget.index);
             }
           }),

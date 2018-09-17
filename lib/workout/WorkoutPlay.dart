@@ -62,12 +62,13 @@ class _MyWorkoutPlayState extends State<MyWorkoutPlay> {
   @override
   void initState() {
     super.initState();
-    _exercises = widget.workout.exercises;
     _startTime = DateTime.now().millisecondsSinceEpoch;
   }
 
   @override
   Widget build(BuildContext context) {
+    _exercises = Store().getExercisesInWorkout(widget.workout);
+
     return Scaffold(
       body: !_done
           ? ListView.builder(
