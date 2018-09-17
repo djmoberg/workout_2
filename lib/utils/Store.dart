@@ -99,6 +99,17 @@ class Store {
     });
   }
 
+  Future addExerciseWithId(Exercise value) async {
+    exercises.add(value);
+
+    await _prefs.then((prefs) {
+      List<String> list = prefs.getStringList("exercises") ?? List();
+      list.add(value.id);
+      prefs.setStringList("exercises", list);
+      prefs.setString(value.id, json.encode(value.toJson()));
+    });
+  }
+
   Future editExercise(Exercise editedExercise) async {
     await _prefs.then((prefs) {
       prefs.setString(editedExercise.id, json.encode(editedExercise.toJson()));
@@ -256,6 +267,17 @@ class Store {
     return list;
   }
   // / workouts
+
+  Future clear() async {
+    await _prefs.then((prefs) async {
+      await prefs.clear();
+      theme = "light";
+      exercises = List();
+      exerciseStats = List();
+      workoutStats = List();
+      workouts = List();
+    });
+  }
 
   //Non persistence
 
